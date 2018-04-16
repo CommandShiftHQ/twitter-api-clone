@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Twitter</title>
+  <style type="text/css">
+    .tweet {
+      padding: 10px;
+      margin: 10px;
+      font-family: Arial, Helvetica, sans-serif;
+      border: 2px solid lightblue;
+      border-radius: 5px;
+    }
+
+    .tweet__username {
+      padding: 0 5px 0 0;
+      font-weight: bold;
+    }
+
+    .tweet__user-handle {
+      color: darkgrey;
+      font-style: italic;
+    }
+
+    .tweet__message {
+      font-size: 32px;
+    }
+
+    .tweet__likes,
+    .tweet__user-handle {
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <ul id="list"></ul>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script type="text/javascript">
+    axios.get('http://localhost:3000/tweets')
+      .then(({ data }) => {
+        const tweets = data.map((tweet) => {
+          const element = document.createElement('div');
+          element.id = tweet.id;
+          element.className = 'tweet';
+
+          const userName = document.createElement('span');
+          userName.className = 'tweet__username';
+          userName.textContent = tweet.user.name;
+
+          const userHandle = document.createElement('span');
+          userHandle.className = 'tweet__user-handle';
+          userHandle.textContent = `@${tweet.user.handle}`;
+
+          const message = document.createElement('p');
+          message.className = 'tweet__message';
+          message.textContent = tweet.message;
+
+          const likes = document.createElement('span');
+          likes.className = 'tweet__likes';
+          likes.textContent = `Likes: ${tweet.likes}`;
+
+          element.appendChild(userName);
+          element.appendChild(userHandle);
+          element.appendChild(message);
+          element.appendChild(likes);
+
+          return element;
+        });
+
+        tweets.forEach((tweet) => {
+          list.appendChild(tweet);
+        });
+      });
+  </script>
+</body>
+</html>
